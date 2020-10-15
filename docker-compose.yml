@@ -1,0 +1,12 @@
+version: '3.6'
+
+services:
+  nuxt:
+    container_name: nuxt
+    build: .
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '3001:3000'
+    command: npm run dev
