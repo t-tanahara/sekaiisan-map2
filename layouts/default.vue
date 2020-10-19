@@ -8,9 +8,9 @@
     <v-toolbar-title v-text="title" />
   </v-app-bar>
 
-  <v-content>
+  <v-main>
     <nuxt />
-  </v-content>
+  </v-main>
 </v-app>
 </template>
 
