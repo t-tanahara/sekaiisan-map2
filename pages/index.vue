@@ -106,7 +106,6 @@ export default {
       this.openInfoWindow = true
       this.currentMarkerId = index
       this.currentMarker = marker
-      console.log(this.currentMarker)
     },
     siteCategory: function(category) {
       const categories = {
