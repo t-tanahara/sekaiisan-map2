@@ -8,56 +8,30 @@
   id='gmap'
 >
   <GmapMarker
-    v-for="(marker, index) in markers"
-      :key="index"
+    v-for="(marker) in markers"
+      :key="marker.site_id"
       :position="marker.position"
       :clickable="true"
-      @click="toggleInfoWindow(marker, index)"
+      @click="toggleInfoWindow(marker, marker.site_id)"
   ></GmapMarker>
   <gmap-info-window
     :position="infoWindowPosition"
     :opened="openInfoWindow"
   >
-    <div>
-      <table border="1" cellpadding="1" style="border-style:solid; color:black;">
-        <tr style="border:1px black solid; padding:30px;">
-          <td colspan="2" style="padding:3px;">
-            <a :href="currentMarker.url" :alt="currentMarker.title" target="_blank">
-              <img :src="currentMarker.image_url">
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding:3px;">
-            <a :href="currentMarker.url" target="_blank">{{ currentMarker.title }}</a>
-          </td>
-        </tr>
-        <tr>
-          <th width="30%">登録区分</th>
-          <td style="padding:3px;">{{ siteCategory(currentMarker.category) }}</td>
-        </tr>
-        <tr>
-          <th width="30%">登録基準</th>
-          <td style="padding:3px;">{{ currentMarker.criteria }}</td>
-        </tr>
-        <tr>
-          <th width="30%">登録年</th>
-          <td style="padding:3px;">{{ currentMarker.registration_year }} 年</td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding:3px;">
-            <p>{{ currentMarker.description }}</p>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <InfoWindow :currentMarker="currentMarker" />
   </gmap-info-window>
 </GmapMap>
 </v-layout>
 </template>
 
 <script>
+import InfoWindow from '~/components/InfoWindow'
+
 export default {
+  components: {
+    InfoWindow,
+  },
+
   data() {
     return {
       tokyo: {lat: 35.681167, lng: 139.767052},
@@ -81,10 +55,10 @@ export default {
       }
       markers.push(
         {
+          site_id: site.id_number,
           position: {lng: parseFloat(site.longitude), lat: parseFloat(site.latitude)},
           title: site.site,
           description: site.short_description,
-          site_id: site.id_number,
           category: site.category,
           url: site.http_url,
           image_url: site.image_url,
@@ -97,14 +71,13 @@ export default {
   },
 
   methods: {
-    toggleInfoWindow: function(marker, index) {
-      if (this.currentMarkerId == index) {
+    toggleInfoWindow: function(marker, site_id) {
+      if (this.currentMarker.site_id == site_id) {
         this.openInfoWindow = !this.openInfoWindow
         return
       }
       this.infoWindowPosition = marker.position
       this.openInfoWindow = true
-      this.currentMarkerId = index
       this.currentMarker = marker
     },
     siteCategory: function(category) {
