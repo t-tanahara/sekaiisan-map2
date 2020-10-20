@@ -3,7 +3,7 @@
 <GmapMap
   :center="tokyo"
   :zoom="5"
-  :options="{minZoom: 4}"
+  :options="{minZoom: 3}"
   map-type-id="terrain"
   id='gmap'
 >

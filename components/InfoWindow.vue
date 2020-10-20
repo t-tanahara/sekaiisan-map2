@@ -1,41 +1,50 @@
 <template>
-<div>
-  <table border="1" cellpadding="1" style="border-style:solid; color:black;">
-    <tr style="border:1px black solid; padding:30px;">
-      <td colspan="2" style="padding:3px;">
-        <a :href="currentMarker.url" :alt="currentMarker.title" target="_blank">
-          <img :src="currentMarker.image_url">
-        </a>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2" style="padding:3px;">
-        <a :href="currentMarker.url" target="_blank">{{ currentMarker.title }}</a>
-      </td>
-    </tr>
-    <tr>
-      <th width="30%">登録区分</th>
-      <td style="padding:3px;">{{ siteCategory(currentMarker.category) }}</td>
-    </tr>
-    <tr>
-      <th width="30%">登録基準</th>
-      <td style="padding:3px;">{{ currentMarker.criteria }}</td>
-    </tr>
-    <tr>
-      <th width="30%">登録年</th>
-      <td style="padding:3px;">{{ currentMarker.registration_year }} 年</td>
-    </tr>
-    <tr>
-      <td colspan="2" style="padding:3px;">
-        <p>{{ currentMarker.description }}</p>
-      </td>
-    </tr>
-  </table>
-</div>
+<v-card
+  class="mx-auto"
+  width="300px"
+>
+  <v-img
+    :src="currentMarker.image_url"
+    height="200px"
+  ></v-img>
+  <v-card-title>
+    {{ currentMarker.title }}
+  </v-card-title>
+  <v-card-subtitle>
+    {{ currentMarker.registration_year }}年 登録<br>
+    {{ siteCategory(currentMarker.category) }}
+  </v-card-subtitle>
+  <v-card-actions @click="show = !show">
+    <v-btn
+      color="orange lighten-2"
+      text
+    >
+      詳細
+    </v-btn>
+    <v-spacer></v-spacer>
+    <v-btn
+      icon
+    >
+      <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+    </v-btn>
+  </v-card-actions>
+  <v-expand-transition>
+    <div v-show="show">
+      <v-divider></v-divider>
+      <v-card-text>
+        {{ currentMarker.description }}
+      </v-card-text>
+    </div>
+  </v-expand-transition>
+</v-card>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    show: false,
+  }),
+
   props: {
     currentMarker: Object,
     default: {
@@ -47,6 +56,10 @@ export default {
       registration_year: '',
       description: '',
     },
+  },
+
+  created: function() {
+    this.show = false
   },
 
   methods: {
