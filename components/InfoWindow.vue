@@ -14,7 +14,7 @@
     {{ currentMarker.registration_year }}年 登録<br>
     {{ siteCategory(currentMarker.category) }}
   </v-card-subtitle>
-  <v-card-actions @click="show = !show">
+  <v-card-actions @click="openDescription = !openDescription">
     <v-btn
       color="orange lighten-2"
       text
@@ -25,11 +25,11 @@
     <v-btn
       icon
     >
-      <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+      <v-icon>{{ openDescription ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
     </v-btn>
   </v-card-actions>
   <v-expand-transition>
-    <div v-show="show">
+    <div v-show="openDescription">
       <v-divider></v-divider>
       <v-card-text>
         {{ currentMarker.description }}
@@ -41,10 +41,6 @@
 
 <script>
 export default {
-  data: () => ({
-    show: false,
-  }),
-
   props: {
     currentMarker: Object,
     default: {
@@ -56,10 +52,7 @@ export default {
       registration_year: '',
       description: '',
     },
-  },
-
-  created: function() {
-    this.show = false
+    openDescription: false,
   },
 
   methods: {

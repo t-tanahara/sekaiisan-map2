@@ -18,7 +18,7 @@
     :position="infoWindowPosition"
     :opened="Object.keys(currentMarker).length !== 0"
   >
-    <InfoWindow :currentMarker="currentMarker" />
+    <InfoWindow :currentMarker="currentMarker" :openDescription="openDescription"/>
   </gmap-info-window>
 </GmapMap>
 </v-layout>
@@ -38,6 +38,7 @@ export default {
       markers: [],
       currentMarker: {},
       infoWindowPosition: {lat: 0, lng: 0},
+      openDescription: false,
     }
   },
 
@@ -70,12 +71,12 @@ export default {
 
   methods: {
     toggleInfoWindow: function(marker, site_id) {
+      this.openDescription = false
       if (this.currentMarker.site_id == site_id) {
         this.currentMarker = {}
         return
       }
       this.infoWindowPosition = {lng: marker.position.lng, lat: marker.position.lat + 1.5},
-      this.openInfoWindow = true
       this.currentMarker = marker
     },
     siteCategory: function(category) {
