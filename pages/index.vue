@@ -37,7 +37,6 @@ export default {
       tokyo: {lat: 35.681167, lng: 139.767052},
       markers: [],
       openInfoWindow: false,
-      currentMarkerId: null,
       currentMarker: {},
       infoWindowPosition: {lat: 0, lng: 0},
     }
@@ -76,7 +75,7 @@ export default {
         this.openInfoWindow = !this.openInfoWindow
         return
       }
-      this.infoWindowPosition = marker.position
+      this.infoWindowPosition = {lng: marker.position.lng, lat: marker.position.lat + 1.5},
       this.openInfoWindow = true
       this.currentMarker = marker
     },
