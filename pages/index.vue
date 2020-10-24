@@ -6,6 +6,7 @@
   :options="{minZoom: 3}"
   map-type-id="terrain"
   id='gmap'
+  @click="clickMap"
 >
   <GmapMarker
     v-for="(marker) in markers"
@@ -79,6 +80,7 @@ export default {
       this.infoWindowPosition = {lng: marker.position.lng, lat: marker.position.lat + 1.5},
       this.currentMarker = marker
     },
+
     siteCategory: function(category) {
       const categories = {
         Cultural: '文化遺産',
@@ -86,7 +88,11 @@ export default {
         Mixed: '複合遺産',
       }
       return categories[category] || ''
-    }
+    },
+
+    clickMap: function() {
+      this.currentMarker = {}
+    },
   },
 };
 </script>
