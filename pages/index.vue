@@ -16,7 +16,7 @@
   ></GmapMarker>
   <gmap-info-window
     :position="infoWindowPosition"
-    :opened="openInfoWindow"
+    :opened="Object.keys(currentMarker).length !== 0"
   >
     <InfoWindow :currentMarker="currentMarker" />
   </gmap-info-window>
@@ -36,7 +36,6 @@ export default {
     return {
       tokyo: {lat: 35.681167, lng: 139.767052},
       markers: [],
-      openInfoWindow: false,
       currentMarker: {},
       infoWindowPosition: {lat: 0, lng: 0},
     }
@@ -72,7 +71,7 @@ export default {
   methods: {
     toggleInfoWindow: function(marker, site_id) {
       if (this.currentMarker.site_id == site_id) {
-        this.openInfoWindow = !this.openInfoWindow
+        this.currentMarker = {}
         return
       }
       this.infoWindowPosition = {lng: marker.position.lng, lat: marker.position.lat + 1.5},
