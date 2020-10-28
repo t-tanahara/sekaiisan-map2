@@ -77,17 +77,8 @@ export default {
         this.currentMarker = {}
         return
       }
-      this.infoWindowPosition = {lng: marker.position.lng, lat: marker.position.lat + 1.5},
+      this.infoWindowPosition = marker.position,
       this.currentMarker = marker
-    },
-
-    siteCategory: function(category) {
-      const categories = {
-        Cultural: '文化遺産',
-        Natural: '自然遺産',
-        Mixed: '複合遺産',
-      }
-      return categories[category] || ''
     },
 
     clickMap: function() {

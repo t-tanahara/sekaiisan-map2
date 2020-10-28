@@ -7,7 +7,7 @@
     :src="currentMarker.image_url"
     height="200px"
   ></v-img>
-  <v-card-title>
+  <v-card-title class=".display-2">
     {{ currentMarker.title }}
   </v-card-title>
   <v-card-subtitle>
