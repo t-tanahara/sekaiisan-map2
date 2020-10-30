@@ -3,69 +3,43 @@
 <GmapMap
   :center="tokyo"
   :zoom="5"
-  :options="{minZoom: 4}"
+  :options="{minZoom: 3}"
   map-type-id="terrain"
   id='gmap'
+  @click="clickMap"
 >
   <GmapMarker
-    v-for="(marker, index) in markers"
-      :key="index"
+    v-for="(marker) in markers"
+      :key="marker.site_id"
       :position="marker.position"
       :clickable="true"
-      @click="toggleInfoWindow(marker, index)"
+      @click="toggleInfoWindow(marker, marker.site_id)"
   ></GmapMarker>
   <gmap-info-window
     :position="infoWindowPosition"
-    :opened="openInfoWindow"
+    :opened="Object.keys(currentMarker).length !== 0"
   >
-    <div>
-      <table border="1" cellpadding="1" style="border-style:solid; color:black;">
-        <tr style="border:1px black solid; padding:30px;">
-          <td colspan="2" style="padding:3px;">
-            <a :href="currentMarker.url" :alt="currentMarker.title" target="_blank">
-              <img :src="currentMarker.image_url">
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding:3px;">
-            <a :href="currentMarker.url" target="_blank">{{ currentMarker.title }}</a>
-          </td>
-        </tr>
-        <tr>
-          <th width="30%">登録区分</th>
-          <td style="padding:3px;">{{ siteCategory(currentMarker.category) }}</td>
-        </tr>
-        <tr>
-          <th width="30%">登録基準</th>
-          <td style="padding:3px;">{{ currentMarker.criteria }}</td>
-        </tr>
-        <tr>
-          <th width="30%">登録年</th>
-          <td style="padding:3px;">{{ currentMarker.registration_year }} 年</td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding:3px;">
-            <p>{{ currentMarker.description }}</p>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <InfoWindow :currentMarker="currentMarker" :openDescription="openDescription"/>
   </gmap-info-window>
 </GmapMap>
 </v-layout>
 </template>
 
 <script>
+import InfoWindow from '~/components/InfoWindow'
+
 export default {
+  components: {
+    InfoWindow,
+  },
+
   data() {
     return {
       tokyo: {lat: 35.681167, lng: 139.767052},
       markers: [],
-      openInfoWindow: false,
-      currentMarkerId: null,
       currentMarker: {},
       infoWindowPosition: {lat: 0, lng: 0},
+      openDescription: false,
     }
   },
 
@@ -81,10 +55,10 @@ export default {
       }
       markers.push(
         {
+          site_id: site.id_number,
           position: {lng: parseFloat(site.longitude), lat: parseFloat(site.latitude)},
           title: site.site,
           description: site.short_description,
-          site_id: site.id_number,
           category: site.category,
           url: site.http_url,
           image_url: site.image_url,
@@ -97,24 +71,19 @@ export default {
   },
 
   methods: {
-    toggleInfoWindow: function(marker, index) {
-      if (this.currentMarkerId == index) {
-        this.openInfoWindow = !this.openInfoWindow
+    toggleInfoWindow: function(marker, site_id) {
+      this.openDescription = false
+      if (this.currentMarker.site_id == site_id) {
+        this.currentMarker = {}
         return
       }
-      this.infoWindowPosition = marker.position
-      this.openInfoWindow = true
-      this.currentMarkerId = index
+      this.infoWindowPosition = marker.position,
       this.currentMarker = marker
     },
-    siteCategory: function(category) {
-      const categories = {
-        Cultural: '文化遺産',
-        Natural: '自然遺産',
-        Mixed: '複合遺産',
-      }
-      return categories[category] || ''
-    }
+
+    clickMap: function() {
+      this.currentMarker = {}
+    },
   },
 };
 </script>
